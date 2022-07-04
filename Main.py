@@ -2,8 +2,10 @@
 # import modules
 from tkinter import *
 from lyrics_extractor import SongLyrics
+from pytube import YouTube
+from youtubesearchpython import VideosSearch
 
-def get_lyrics():
+def get_song():
 
 	extract_lyrics = SongLyrics(
 		"AIzaSyA_QxVG1pBOe1207n-0iRltY8p3LLUy6Pc", "2749d8edd42850fb4")
@@ -17,6 +19,9 @@ def get_lyrics():
 	lb.tag_add("tag_lol", "1.0", "end")
 	lb.config(state=DISABLED)
 
+
+def get_video():
+	VideosSearch = VideosSearch(str(e.get()), limit = 1)
 
 master = Tk()
 master.configure(bg='light grey')
@@ -44,7 +49,7 @@ e = Entry(master, width=80, font=("Arial", 15))
 e.grid(row=0, column=1)
 
 b = Button(master, text="Show",
-		command=get_lyrics, bg="Green")
+		command=get_song, bg="Green")
 
 b.grid(row=0, column=2, columnspan=2,
 	rowspan=2, padx=5, pady=5,)
