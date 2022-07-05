@@ -1,5 +1,10 @@
 
 # import modules
+import os as os
+os.system('pip install lyrics_extractor')
+os.system('pip install pytube')
+os.system('pip install YT-DLP')
+os.system('pip3 install youtube-search-python')
 from tkinter import *
 from lyrics_extractor import SongLyrics
 from pytube import YouTube
