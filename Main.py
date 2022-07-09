@@ -1,6 +1,6 @@
 # import modules
 from __future__ import unicode_literals
-from youtubesearchpython.__future__ import VideosSearch
+
 import os
 import time
 from tkinter import *
@@ -28,9 +28,10 @@ except ImportError:
 
 try:
     from youtubesearchpython import VideosSearch
-except ImportError:
+except ModuleNotFoundError:
     os.system('pip3 install youtube-search-python')
-    from youtubesearchpython import VideosSearch
+    #from youtubesearchpython import VideosSearch
+    from youtubesearchpython.__future__ import VideosSearch
     pass
 
 try:
@@ -85,6 +86,7 @@ def find_vlc_title(hwnd, lParam):
             return True
         if title_without_ext == "":
             get_song(i=title_without_vlc)
+            return
         # pass title_without_ext into a function, object or whatever you want there, win32 API isn't python friendly, and you can't just return it
         get_song(i=title_without_ext)
         return False # Enumeration stops when we return False
@@ -120,7 +122,8 @@ def get_song(**kwargs):
             e.insert(0,search)
             temp = extract_lyrics.get_lyrics(str(search))
             res = temp
-            gs = await get_song(t=1, v=str(search))
+            #gs = await get_song(t=1, v=str(search))
+            get_video(t=1, v=str(search))
 
         elif e.get() == "" or e.get() == " ":
             print("No entry, requesting from VLC")
@@ -131,7 +134,8 @@ def get_song(**kwargs):
             temp = extract_lyrics.get_lyrics(str(e.get()))
             res = temp['lyrics']
             print(f"Searching Entry\n       {e.get()}")
-            gs = await get_song(t=2)
+            #gs = await get_song(t=2)
+            get_video(t=2)
 
 
 
@@ -151,7 +155,7 @@ def get_song(**kwargs):
 
 
 
-async def get_song(**kwargs):
+def get_video(**kwargs):
     #VideosSearch = VideosSearch(v, limit = 1)
     t = kwargs.get('t',None)
     if t == 0:
@@ -159,12 +163,10 @@ async def get_song(**kwargs):
     elif t == 1:
         v = kwargs.get('v',None)
         videosSearch = VideosSearch(str(v), limit = 1)
-        videosResult = await videosSearch.next()
-        print(videosResult)
+        print(videosSearch.result())
     elif t == 2:
         videosSearch = VideosSearch(str(e.get()), limit = 1)
-        videosResult = await videosSearch.next()
-        print(videosResult)
+        print(videosSearch.result())
 
 
 master = Tk()
