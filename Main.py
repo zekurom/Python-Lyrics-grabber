@@ -1,4 +1,6 @@
 # import modules
+from __future__ import unicode_literals
+from youtubesearchpython.__future__ import VideosSearch
 import os
 import time
 from tkinter import *
@@ -7,24 +9,41 @@ try:
     import asyncio
 except ImportError:
     os.system('pip install asyncio')
+    import asyncio
     pass
 
 try:
     from lyrics_extractor import SongLyrics
 except ImportError:
     os.system('pip install lyrics_extractor')
+    from lyrics_extractor import SongLyrics
     pass
 
 try:
     from pytube import YouTube
 except ImportError:
     os.system('pip install pytube')
+    from pytube import YouTube
     pass
 
 try:
     from youtubesearchpython import VideosSearch
 except ImportError:
     os.system('pip3 install youtube-search-python')
+    from youtubesearchpython import VideosSearch
+    pass
+
+try:
+    import youtube_dl
+except ImportError:
+    os.system('pip install youtube_dl')
+    import youtube_dl
+    pass
+try:
+    import ffmpeg
+except ImportError:
+    os.system('pip install ffmpeg')
+    import ffmpeg
     pass
 
 import ctypes
@@ -77,7 +96,7 @@ def find_vlc_title(hwnd, lParam):
 
 
 def get_song(**kwargs):
-
+        print("e")
         extract_lyrics = SongLyrics(
             "AIzaSyA_QxVG1pBOe1207n-0iRltY8p3LLUy6Pc", "2749d8edd42850fb4")
 	
@@ -101,6 +120,7 @@ def get_song(**kwargs):
             e.insert(0,search)
             temp = extract_lyrics.get_lyrics(str(search))
             res = temp
+            gs = await get_song(t=1, v=str(search))
 
         elif e.get() == "" or e.get() == " ":
             print("No entry, requesting from VLC")
@@ -111,12 +131,16 @@ def get_song(**kwargs):
             temp = extract_lyrics.get_lyrics(str(e.get()))
             res = temp['lyrics']
             print(f"Searching Entry\n       {e.get()}")
+            gs = await get_song(t=2)
 
 
 
 
         #video shit W.I.P
         #get_video(str(e.get()) or kwargs.get('i',None)
+        
+
+        
         
 	#result.set(res)
         lb.config(state=NORMAL)
@@ -126,8 +150,21 @@ def get_song(**kwargs):
         lb.config(state=DISABLED)
 
 
-def get_video(i):
-	VideosSearch = VideosSearch(i, limit = 1)
+
+async def get_song(**kwargs):
+    #VideosSearch = VideosSearch(v, limit = 1)
+    t = kwargs.get('t',None)
+    if t == 0:
+        print("Nop")
+    elif t == 1:
+        v = kwargs.get('v',None)
+        videosSearch = VideosSearch(str(v), limit = 1)
+        videosResult = await videosSearch.next()
+        print(videosResult)
+    elif t == 2:
+        videosSearch = VideosSearch(str(e.get()), limit = 1)
+        videosResult = await videosSearch.next()
+        print(videosResult)
 
 
 master = Tk()
