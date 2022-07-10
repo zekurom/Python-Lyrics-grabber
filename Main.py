@@ -168,6 +168,9 @@ def get_video(**kwargs):
         videosSearch = VideosSearch(str(e.get()), limit = 1)
         print(videosSearch.result())
 
+def eclear():
+    e.delete(0,"end")
+
 
 master = Tk()
 master.configure(bg='light grey')
@@ -196,8 +199,12 @@ e.grid(row=0, column=1)
 
 b = Button(master, text="Show",
 		command=get_song, bg="Green")
+c = Button(master, text="Clear",
+		command=eclear, bg="Orange")
 
 b.grid(row=0, column=2, columnspan=2,
+	rowspan=2, padx=5, pady=5,)
+c.grid(row=1, column=2, columnspan=2,
 	rowspan=2, padx=5, pady=5,)
 lb.grid(row=3, column=1, sticky=W)
 lb.tag_configure("tag_lol", justify='center')
