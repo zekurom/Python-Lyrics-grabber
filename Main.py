@@ -22,7 +22,7 @@ except ImportError:
 try:
     from pytube import YouTube
 except ImportError:
-    os.system('pip install pytube')
+    os.system('pip install git+https://github.com/pytube/pytube')
     from pytube import YouTube
     pass
 
@@ -163,10 +163,38 @@ def get_video(**kwargs):
     elif t == 1:
         v = kwargs.get('v',None)
         videosSearch = VideosSearch(str(v), limit = 1)
-        print(videosSearch.result())
     elif t == 2:
         videosSearch = VideosSearch(str(e.get()), limit = 1)
-        print(videosSearch.result())
+
+    for data in videosSearch.result()['result']:
+        if data['link']:
+            global link
+            link = data['link']
+            print(link)
+
+    dl = Button(master, text="Download",
+		command=dl, bg="Blue")
+    dl.grid(row=5, column=2, columnspan=2,
+	rowspan=2, padx=5, pady=5,)
+
+
+def download():
+    
+    
+    #ydl_opts = {
+    #    'format': 'bestaudio/best',
+    #    'postprocessors': [{
+    #        'key': 'FFmpegExtractAudio',
+    #        'preferredcodec': 'mp3',
+    #        'preferredquality': '192',
+    #    }],
+    #}
+    #with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+    #ydl.download([link])
+
+    #YouTube(link).streams.first().download()
+    yt = YouTube(link)
+    yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first().download()
 
 def eclear():
     e.delete(0,"end")
