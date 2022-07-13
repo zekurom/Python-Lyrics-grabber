@@ -98,7 +98,6 @@ def find_vlc_title(hwnd, lParam):
 
 
 def get_song(**kwargs):
-        print("e")
         extract_lyrics = SongLyrics(
             "AIzaSyA_QxVG1pBOe1207n-0iRltY8p3LLUy6Pc", "2749d8edd42850fb4")
 	
@@ -173,8 +172,8 @@ def get_video(**kwargs):
             print(link)
 
     dl = Button(master, text="Download",
-		command=dl, bg="Blue")
-    dl.grid(row=5, column=2, columnspan=2,
+		command=download, bg="LightBlue")
+    dl.grid(row=3, column=2, columnspan=2,
 	rowspan=2, padx=5, pady=5,)
 
 
