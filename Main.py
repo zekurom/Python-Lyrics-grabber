@@ -219,7 +219,7 @@ def eclear():
 
 master = Tk()
 master.configure(bg='light grey')
-master.geometry("1250x750")
+master.geometry("1250x950")
 master.title('Lyric Grabber')
 master.iconphoto(False, PhotoImage(file=os.path.join(os.getcwd(), 'Soup.png')))
 
