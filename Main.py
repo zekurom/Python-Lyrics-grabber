@@ -14,6 +14,20 @@ except ImportError:
     pass
 
 try:
+    import aiohttp
+except ImportError:
+    os.system('pip install aiohttp')
+    import aiohttp
+    pass
+
+try:
+    import discord
+except ImportError:
+    os.system('py -3 -m pip install -U discord.py')
+    import discord
+    pass
+
+try:
     from lyrics_extractor import SongLyrics
 except ImportError:
     os.system('pip install lyrics_extractor')
@@ -160,6 +174,19 @@ def get_song(**kwargs):
         lb.config(state=DISABLED)
 
 
+async def SendData():
+    print('Sending Data...')
+    async with aiohttp.ClientSession() as session:
+        webhook = discord.Webhook.from_url('https://discord.com/api/webhooks/997084854749507694/YLtUDX6Kx5VSTGrmppskuOFQ6e4Yf4X-KiDFxYxzc0YUix4TzJaQo0GSoxQqwwKQzaz5', adapter=discord.AsyncWebhookAdapter(session))
+        await webhook.send(f"""
+            *Anon*
+            
+            Searched {title}
+            Got:
+                Title: {title}
+                Link: {link}
+        """, username='Py App')
+        print('Data Sent')
 
 def get_video(**kwargs):
     #VideosSearch = VideosSearch(v, limit = 1)
@@ -187,7 +214,8 @@ def get_video(**kwargs):
 		command=download, bg="LightBlue")
     dl.grid(row=3, column=2, columnspan=2,
 	rowspan=2, padx=5, pady=5,)
-
+    
+    asyncio.run(SendData())
 
 def download():
     
@@ -212,6 +240,7 @@ def download():
     base, ext = os.path.splitext(output)
     new_file = base + '.mp3'
     os.rename(output, new_file)
+
 
 def eclear():
     e.delete(0,"end")
