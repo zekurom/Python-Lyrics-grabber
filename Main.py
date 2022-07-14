@@ -220,6 +220,8 @@ def eclear():
 master = Tk()
 master.configure(bg='light grey')
 master.geometry("1250x750")
+master.title('Lyric Grabber')
+master.iconphoto(False, PhotoImage(file=os.path.join(os.getcwd(), 'Soup.png')))
 
 
 result = StringVar()
