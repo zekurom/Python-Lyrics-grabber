@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 import os
 import time
 from tkinter import *
+os.system('pip install ez_setup')
 
 try:
     import asyncio
@@ -45,6 +46,12 @@ try:
 except ImportError:
     os.system('pip install ffmpeg')
     import ffmpeg
+    pass
+try:
+    import moviepy
+except ImportError:
+    os.system('pip install moviepy')
+    from moviepy.editor import *
     pass
 
 import ctypes
@@ -164,12 +171,17 @@ def get_video(**kwargs):
         videosSearch = VideosSearch(str(v), limit = 1)
     elif t == 2:
         videosSearch = VideosSearch(str(e.get()), limit = 1)
-
+    
+    
     for data in videosSearch.result()['result']:
         if data['link']:
             global link
             link = data['link']
             print(link)
+        if data['title']:
+            global title
+            title = data['title']
+            print(title)
 
     dl = Button(master, text="Download",
 		command=download, bg="LightBlue")
@@ -189,11 +201,17 @@ def download():
     #    }],
     #}
     #with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-    #ydl.download([link])
-
+    #    ydl.download([link])
+    
     #YouTube(link).streams.first().download()
+
     yt = YouTube(link)
-    yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first().download()
+    #yt.streams.filter(progressive=True, file_extension='mp4').order_by('resolution').desc().first().download()
+    video = yt.streams.filter(only_audio=True).first()
+    output = video.download(output_path=os.getcwd())
+    base, ext = os.path.splitext(output)
+    new_file = base + '.mp3'
+    os.rename(output, new_file)
 
 def eclear():
     e.delete(0,"end")
