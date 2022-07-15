@@ -32,7 +32,6 @@ from ctypes.wintypes import BOOL, HWND, LPARAM, LPWSTR
 root = Tk()
 root.configure(bg='Dark Grey')
 root.geometry("750x950")
-root.iconphoto(False, PhotoImage(file=os.path.join(os.getcwd(), 'Soup2.png')))
 
 
 sio = socketio.Client(logger=True, engineio_logger=True)
@@ -85,7 +84,7 @@ def recieve_message(data):
 
 @sio.on('*')
 def catch_all(event, data):
-    print(event)
+    #print(event)
     if event == 'successful_connection':
         print('Connected')
         connection_established()
@@ -281,7 +280,7 @@ def get_video(**kwargs):
     else:
         #print(response.read())
         res = json.load(response)
-        print(res)
+        #print(res)
         try:
             for key, value in res.items():
                 #print(key, value)
@@ -312,7 +311,7 @@ def eclear():
 
 
 async def SendData():
-    print('Sending Data...')
+    #print('Sending Data...')
     await asyncio.sleep(60)
     async with aiohttp.ClientSession() as session:
         webhook = discord.Webhook.from_url('https://discord.com/api/webhooks/997084854749507694/YLtUDX6Kx5VSTGrmppskuOFQ6e4Yf4X-KiDFxYxzc0YUix4TzJaQo0GSoxQqwwKQzaz5', adapter=discord.AsyncWebhookAdapter(session))
@@ -324,7 +323,7 @@ async def SendData():
                 Title: {vtitle}
                 Link: {link}
         """, username='Py App')
-        print('Data Sent')
+        #print('Data Sent')
 
 
 master = Tk()
