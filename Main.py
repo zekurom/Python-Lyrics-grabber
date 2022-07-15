@@ -15,6 +15,7 @@ import discord
 import socket
 import socketio
 import webbrowser
+import semantic_version
 from lyrics_extractor import SongLyrics
 from pytube import YouTube
 from youtubesearchpython import VideosSearch

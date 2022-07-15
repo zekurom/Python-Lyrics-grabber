@@ -7,7 +7,7 @@ for /f "skip=1 delims=" %%A in (
   'wmic computersystem get name'
 ) do for /f "delims=" %%B in ("%%A") do set "compName=%%A"
 
-
+set /p ver=What app version?
 cd /D %currentDirectory%
-start "Builder" /B /D "%currentDirectory%" /REALTIME /WAIT "python" -m nuitka --onefile --windows-disable-console --windows-icon-from-ico=Soup.ico --enable-plugin=numpy --enable-plugin=tk-inter Main.py
+start "Builder" /B /D "%currentDirectory%" /REALTIME /WAIT "python" -m nuitka --onefile --windows-product-version=%ver% --windows-product-name="Python App" --windows-company-name="SnakeWorks" --windows-disable-console --windows-icon-from-ico=Soup.ico --enable-plugin=numpy --enable-plugin=tk-inter Main.py
 pause
