@@ -9,5 +9,6 @@ for /f "skip=1 delims=" %%A in (
 
 set /p ver=What app version?  
 cd /D %currentDirectory%
-start "Builder" /B /D "%currentDirectory%" /REALTIME /WAIT "python" -m nuitka --onefile --windows-product-version=%ver% --windows-product-name="Python App" --windows-company-name="SnakeWorks" --windows-disable-console --windows-icon-from-ico=Soup.ico --enable-plugin=numpy --enable-plugin=tk-inter Main.py
+set "splash=%cd%\Splash-Screen.png"
+start "Builder" /B /D "%currentDirectory%" /REALTIME /WAIT "python" -m nuitka --onefile --onefile-windows-splash-screen-image="%splash%" --windows-product-version=%ver% --windows-product-name="Python App" --windows-company-name="SnakeWorks" --windows-disable-console --windows-icon-from-ico=Soup.ico --enable-plugin=numpy --enable-plugin=tk-inter App.py
 pause

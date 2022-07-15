@@ -9,6 +9,9 @@ import json
 import ast
 from tkinter import *
 from tkinter import filedialog
+from tkinter import ttk
+import ttkthemes
+from ttkthemes import ThemedTk
 import asyncio
 import aiohttp
 import discord
@@ -20,10 +23,31 @@ from lyrics_extractor import SongLyrics
 from pytube import YouTube
 from youtubesearchpython import VideosSearch
 import ffmpeg
+import tempfile
 
 import ctypes
 from ctypes import c_int
 from ctypes.wintypes import BOOL, HWND, LPARAM, LPWSTR
+
+# This will find a file inside your onefile.exe
+#open(os.path.join(os.path.dirname(__file__), "user-provided-file.txt"))
+
+#print("Delaying startup by 10s...")
+
+time.sleep(15)
+# Use this code to signal the splash screen removal.
+if "NUITKA_ONEFILE_PARENT" in os.environ:
+   
+   splash_filename = os.path.join(
+      
+      tempfile.gettempdir(),
+      "onefile_%d_splash_feedback.tmp" % int(os.environ["NUITKA_ONEFILE_PARENT"]),
+   )
+
+   if os.path.exists(splash_filename):
+      os.unlink(splash_filename)
+
+#print("Done... splash should be gone.")
 
 
 
@@ -33,6 +57,13 @@ from ctypes.wintypes import BOOL, HWND, LPARAM, LPWSTR
 root = Tk()
 root.configure(bg='Dark Grey')
 root.geometry("750x950")
+style = ttk.Style(root)
+style.theme_use('clam')
+#root.tk.call('source', os.path.join(os.path.dirname(__file__), 'azure.tcl'))
+#root.tk.call("set_theme", "dark")
+#style.theme_use('azure')
+
+
 
 
 sio = socketio.Client(logger=True, engineio_logger=True)
@@ -90,24 +121,31 @@ def catch_all(event, data):
         print('Connected')
         connection_established()
 
-    if event == 'recieve message':
+    if event == 'recieve message' or event == 'recieve message err':
         print('Recieved Message')
         recieve_message(data)
+    if event == 'flush':
+        chat.delete(0,END)
 
 def send_message():
     print('I sent a message')
     msg = my_msg.get()
+    if msg == "" or msg == " ":
+        return
+    
     my_msg.set("")
     sending = { 'message': msg, 'name': os.getlogin() }
     sio.emit('send message', sending)
     
 
 entry_field = Entry(root, textvariable=my_msg, width=45)
-entry_field.bind("<Return>", send_message)
 entry_field.pack()
 send_button = Button(root, text="Send", command=send_message)
 send_button.pack()
 
+def func2(event=None):
+    send_message()
+root.bind("<Return>", func2)
 
 
 
@@ -123,10 +161,10 @@ def connect_error(data):
 def disconnect():
     print("I'm disconnected!")
 
+sio.emit('Ready')
     
 
 #--Main App
-sio.emit('Ready')
 # You need to decorate function for callback
 # to work, so I just put the decoration into another decorator
 def win32_callback(callback):
@@ -333,7 +371,8 @@ master.geometry("1250x950")
 master.title('Lyric Grabber')
 def func(event=None):
     get_song()
-master.bind('<Return>', func)
+style2 = ttk.Style(master)
+style2.theme_use('clam')
 
 
 

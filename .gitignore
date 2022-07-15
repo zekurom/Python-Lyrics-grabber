@@ -13,7 +13,10 @@
 *.ico
 Main.dist/
 Main.build/
-Main.onefile-build
+Main.onefile-build/
+Launcher.dist/
+Launcher.build/
+Launcher.onefile-build/
 *.png
 *.exe
 
